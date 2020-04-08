@@ -1,0 +1,22 @@
+S -> NP, VP
+S -> VP, NP
+NP -> Noun, Noun
+NP -> Noun, PP
+NP -> Det, Noun
+VP -> Verb NP
+VP -> Y, PP
+PP -> Prep, NP
+NP -> time
+NP -> flies
+NP -> arrow
+Noun -> time
+Noun -> flies
+Noun -> arrow
+VP -> time
+VP -> flies
+VP -> like
+Verb -> time
+Verb -> flies
+Verb -> like
+Prep -> like
+Det -> an

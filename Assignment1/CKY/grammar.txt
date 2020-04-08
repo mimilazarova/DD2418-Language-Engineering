@@ -1,0 +1,11 @@
+S -> NP,VP
+NP -> JJ,NP
+NP -> NP, PP
+NP -> giant
+NP -> cuts
+NP -> welfare
+VP -> Verb,PP
+Verb -> cuts
+PP -> Prep,NP
+Prep -> in
+JJ -> giant

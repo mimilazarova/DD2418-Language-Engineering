@@ -1,0 +1,19 @@
+S -> NP, VP
+NP -> He
+NP -> Det, Noun
+NP -> X, PP
+X -> Det, Noun
+VP -> Verb NP
+VP -> Y, PP
+Y -> Verb, NP
+PP -> Prep, NP
+Det -> the
+Det -> a
+Verb -> built
+Prep -> with
+Prep -> in
+Prep -> behind
+Noun -> hammer
+Noun -> shed
+Noun -> yard
+Noun -> house
