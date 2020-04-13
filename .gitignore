@@ -1,0 +1,10 @@
+*.txt
+*.csv
+*.sh
+*.bat
+*.conllu
+
+*.idea*
+
+
+
