@@ -217,7 +217,6 @@ class NERClassifier(nn.Module):
 # MAIN SECTION
 #
 if __name__ == '__main__':
-    resource.setrlimit(resource.RLIMIT_STACK, (resource.RLIM_INFINITY, resource.RLIM_INFINITY))
 
     parser = argparse.ArgumentParser(description='word2vec embeddings toolkit')
     parser.add_argument('-tr', '--train', default='data/ner_training.csv',
