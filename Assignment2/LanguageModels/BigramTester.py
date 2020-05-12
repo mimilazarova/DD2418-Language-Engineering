@@ -134,6 +134,7 @@ class BigramTester(object):
                 # Important that it is named self.tokens for the --check flag to work
                 for token in self.tokens:
                     self.compute_entropy_cumulatively(token)
+                    self.test_words_processed = self.test_words_processed + 1
             return True
         except IOError:
             print('Error reading testfile')

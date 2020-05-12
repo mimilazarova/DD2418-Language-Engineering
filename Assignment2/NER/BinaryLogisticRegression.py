@@ -128,7 +128,7 @@ class BinaryLogisticRegression(object):
             self.theta = self.theta - self.LEARNING_RATE * self.gradient
             if c % 10 == 0:
                 self.update_plot(np.sum(np.square(self.gradient)))
-                print(self.gradient)
+                #print(self.gradient)
             c = c + 1
 
     def minibatch_fit(self):
@@ -149,7 +149,7 @@ class BinaryLogisticRegression(object):
             self.theta = self.theta - self.LEARNING_RATE * self.gradient
             if c % 10 == 0:
                 self.update_plot(np.sum(np.square(self.gradient)))
-                print(self.gradient)
+                #print(self.gradient)
             c = c + 1
 
     def fit(self):

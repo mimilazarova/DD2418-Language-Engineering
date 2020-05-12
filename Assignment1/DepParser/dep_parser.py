@@ -26,7 +26,7 @@ class Parser:
 
         Args: source: An iterable, such as a file pointer.
 
-        Yields: Triples of the form `words`, `tags`, heads where: `words`
+        Yields: Triples of the form `words`, `tags`, `heads` where: `words`
         is the list of words of the tree (including the pseudo-word
         <ROOT> at position 0), `tags` is the list of corresponding
         part-of-speech tags, and `heads` is the list of head indices
@@ -70,21 +70,21 @@ class Parser:
                 print("Final predicted tree: ", pred_tree)
                 return
 
-    def create_dataset(self, source, train=False) :
+    def create_dataset(self, source, train=False):
         """
         Creates a dataset from all parser configurations encountered
         during parsing of the training dataset.
         (Not used in assignment 1).
         """
         ds = Dataset()
-        with open(filename) as source:
-            for w,tags,tree,relations in self.trees(source) : 
-                i, stack, pred_tree = 0, [], [0]*len(tree) # Input configuration
-                m = self.compute_correct_move(i,stack,pred_tree,tree)
-                while m != None :
+        with open(source, encoding='utf-8') as f:
+            for w, tags, tree, relations in self.trees(f):
+                i, stack, pred_tree = 0, [], [0] * len(tree)  # Input configuration
+                m = self.compute_correct_move(i, stack, pred_tree, tree)
+                while m != None:
                     ds.add_datapoint(w, tags, i, stack, m, train)
-                    i,stack,pred_tree = self.move(i,stack,pred_tree,m)
-                    m = self.compute_correct_move(i,stack,pred_tree,tree)
+                    i, stack, pred_tree = self.move(i, stack, pred_tree, m)
+                    m = self.compute_correct_move(i, stack, pred_tree, tree)
         return ds
 
     def valid_moves(self, i, stack, pred_tree):
@@ -114,7 +114,7 @@ class Parser:
             moves.append(self.RA)
 
         return moves
-        
+
     def move(self, i, stack, pred_tree, move):
         """
         Executes a single move.
@@ -218,10 +218,10 @@ if __name__ == '__main__':
         p.step_by_step(args.step_by_step)
 
     elif args.compute_correct_moves:
-        with open("mimi_output3.conllu", "w") as f:
-            with open(filename) as source:
-                for w, tags, tree, relations in p.trees(source):
-                    x = p.compute_correct_moves(tree)
-                    print(x)
-                    f.write(str(x)+"\n")
-            f.close()
+        #with open("mimi_output3.conllu", "w") as f:
+        with open(filename) as source:
+            for w, tags, tree, relations in p.trees(source):
+                x = p.compute_correct_moves(tree)
+                print(x)
+                    # f.write(str(x)+"\n")
+            #f.close()

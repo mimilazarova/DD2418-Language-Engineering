@@ -26,7 +26,7 @@ class BigramTrainer(object):
         """
         with codecs.open(f, 'r', 'utf-8') as text_file:
             text = reader = str(text_file.read()).lower()
-            # print("file - read")
+            print("file - read")
         try:
             self.tokens = nltk.word_tokenize(text)
             # Important that it is named self.tokens for the --check flag to work
@@ -157,8 +157,8 @@ def main():
         response_data = response.json()
         if response_data['correct']:
             print('Success! Your results are correct')
-            for row in results:
-                print(row)
+            # for row in results:
+            #     print(row)
         else:
             print('Your results:\n')
             for row in results:

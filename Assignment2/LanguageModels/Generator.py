@@ -99,6 +99,7 @@ class Generator(object):
         of the language model.
         """
         # YOUR CODE HERE
+        w = w.lower()
         res = w + " "
         ix = self.index[w]
 
@@ -118,7 +119,6 @@ class Generator(object):
                 ix = random.randint(0, self.unique_words)
 
         print(res)
-
 
 
 def main():
