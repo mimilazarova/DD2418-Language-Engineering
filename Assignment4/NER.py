@@ -13,6 +13,7 @@ from torch import nn
 from torch.utils.data import Dataset, DataLoader
 from torch.nn.utils import clip_grad_norm_
 import sys
+import resource
 
 from GRU import GRU2
 
@@ -176,14 +177,20 @@ class NERClassifier(nn.Module):
         B = len(x)
         T = len(x[0])
 
-        c_ixs = []
+        c_ixs = torch.zeros((B, T, max_w_len), dtype=int)
+        w_ixs = torch.zeros((B, T), dtype=int)
         for i, s in enumerate(x):
-            c_ixs.append([])
             for j, w in enumerate(s):
-                wv = [0 for _ in range(max_w_len)]
-                c_ixs[i].append(wv)
+                if w in self.w2i:
+                    w_ixs[i, j] = self.w2i[w]
+                elif w.lower() in self.w2i:
+                    w_ixs[i, j] = self.w2i[w.lower()]
+                else:
+                    w_ixs[i, j] = self.w2i[self.unknown_word]
+
                 for k, c in enumerate(w):
-                    c_ixs[i][j][k] = self.c2i[c]
+                    c_ixs[i, j, k] = self.c2i[c]
+
 
         x_4d = self.char_emb(torch.LongTensor(c_ixs))
         x_3d = x_4d.reshape((B*T, max_w_len, -1))
@@ -192,24 +199,25 @@ class NERClassifier(nn.Module):
         char_h_2d = torch.cat((char_h_2d_fw, char_h_2d_bw), 1)
         char_h_3d = char_h_2d.reshape((B, T, -1))
 
-        w_ixs = []
-        for i, s in enumerate(x):
-            w_ixs.append([0 for _ in range(T)])
-            for j, w in enumerate(s):
-                if w in self.w2i:
-                    w_ixs[i][j] = self.w2i[w]
-                elif w.lower() in self.w2i:
-                    w_ixs[i][j] = self.w2i[w.lower()]
-                else:
-                    w_ixs[i][j] = self.w2i[self.unknown_word]
+        # #w_ixs = []
+        # w_ixs = torch.zeros((B, T), dtype=int)
+        # for i, s in enumerate(x):
+        #     #w_ixs.append([0 for _ in range(T)])
+        #     for j, w in enumerate(s):
+        #         if w in self.w2i:
+        #             w_ixs[i, j] = self.w2i[w]
+        #         elif w.lower() in self.w2i:
+        #             w_ixs[i, j] = self.w2i[w.lower()]
+        #         else:
+        #             w_ixs[i, j] = self.w2i[self.unknown_word]
 
         word_glove = self.word_emb(torch.LongTensor(w_ixs))
         words_3d = torch.cat((word_glove, char_h_3d), 2)
-        print("words vec created")
+        #print("words vec created")
         outputs, h_fw, h_bw = self.word_birnn.forward(words_3d)
-        print("outputs computed")
+        #print("outputs computed")
         res = self.final_pred(outputs)
-        print("result computed")
+        #print("result computed")
         return res
 
 
@@ -217,6 +225,8 @@ class NERClassifier(nn.Module):
 # MAIN SECTION
 #
 if __name__ == '__main__':
+
+    resource.setrlimit(resource.RLIMIT_STACK, (resource.RLIM_INFINITY, resource.RLIM_INFINITY))
 
     parser = argparse.ArgumentParser(description='word2vec embeddings toolkit')
     parser.add_argument('-tr', '--train', default='data/ner_training.csv',
@@ -243,7 +253,7 @@ if __name__ == '__main__':
         for x, y in tqdm(training_loader, desc="Epoch {}".format(epoch + 1)):
             optimizer.zero_grad()
             logits = ner.forward(x)
-            print(logits)
+            #print(logits)
             logits_shape = logits.shape
             
             loss = criterion(logits.reshape(-1, logits_shape[2]), torch.tensor(y).reshape(-1,))
