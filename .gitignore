@@ -1,4 +1,5 @@
-*.txt
+*.zip
+*.pdf
 *.csv
 *.sh
 *.bat
