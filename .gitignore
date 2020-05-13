@@ -1,9 +1,13 @@
 *.zip
 *.pdf
-
+*.txt
+*.pyc
+*.csv
 *.sh
 *.bat
 *.conllu
+*.jpg
+*.pkl
 
 *.idea*
 
